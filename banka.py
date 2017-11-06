@@ -1,5 +1,5 @@
 import sqlite3
-import curses
+#import curses
 
 baza = "banka1.db"
 
