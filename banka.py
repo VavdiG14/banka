@@ -15,14 +15,15 @@ baza = "banka1.db"
 
 class BancniTerminal:
     def __init__(self):
-        self.oseba = None
-        self.racun = None
+        self.oseba = None   # izbrana oseba
+        self.racun = None   # izbran račun
         self.cur = None
         self.con = None
-        self.menu = "glavniMenu"
+        self.menu = "glavniMenu"   # začetni meni
         self.zazeni()
         
     def zazeni(self):
+        # Glavna zanka, ki izbira menije in izvaja ustrezne funkcije.
         with sqlite3.connect(baza) as con:
             self.con = con
             self.cur = con.cursor()
@@ -41,6 +42,7 @@ class BancniTerminal:
                     self.oRacunu()
 
     def glavniMenu(self):
+        # Meni: glavniMenu
         print("-"*10)
         print("O - Pregled Oseb")
         print("X - Izhod")
@@ -51,6 +53,7 @@ class BancniTerminal:
             exit()
             
     def izberiOsebo(self):
+        # Meni: izberiOsebo
         podatki = input("Priimek osebe: ");
         self.cur.execute("""
     SELECT EMSO, IME, PRIIMEK, ULICA, HISNA_STEVILKA, Posta.POSTNA_ST, Posta.POSTA
@@ -79,6 +82,7 @@ class BancniTerminal:
             return
             
     def dodajOsebo(self):
+        # Meni: dodajOsebo
         print("Dodajanje nove osebe")
         ime = input("Ime: ")
         priimek = input("Priimek: ")
