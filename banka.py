@@ -132,6 +132,20 @@ Naslov: {3} {4}, {5} {6}""".format(ime, priimek, emso, ulica, hisna_stevilka, po
         # I - Izpis transakcij
         # P - Položi
         # D - Dvigni
+        print("I - Izpis transakcij")
+        print("P - Položi")
+        print("D - Dvigni")
+        izbira = input("> ")
+        if izbira.lower() == 'i':
+            self.cur.execute("""
+            SELECT RACUN, ZNESEK, DATUM FROM Transakcija
+            WHERE RACUN = ?""", ('%' +  self.racun +'%',))
+            transakcije = self.cur.fetchall()
+            for racun, znesek, datum in transakcije:
+                print(racun, znesek, datum)
+        elif izbira.lower() == 'p':
+            znesek = input('Vnesi znesek: ')
+            #konec
         print("N - Nazaj")
         izbira = input("> ")
         if izbira.lower() == "n":
