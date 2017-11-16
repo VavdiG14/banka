@@ -15,14 +15,15 @@ baza = "banka1.db"
 
 class BancniTerminal:
     def __init__(self):
-        self.oseba = None
-        self.racun = None
+        self.oseba = None   # izbrana oseba
+        self.racun = None   # izbran račun
         self.cur = None
         self.con = None
-        self.menu = "glavniMenu"
+        self.menu = "glavniMenu"   # začetni meni
         self.zazeni()
         
     def zazeni(self):
+        # Glavna zanka, ki izbira menije in izvaja ustrezne funkcije.
         with sqlite3.connect(baza) as con:
             self.con = con
             self.cur = con.cursor()
@@ -41,6 +42,7 @@ class BancniTerminal:
                     self.oRacunu()
 
     def glavniMenu(self):
+        # Meni: glavniMenu
         print("-"*10)
         print("O - Pregled Oseb")
         print("X - Izhod")
@@ -51,6 +53,7 @@ class BancniTerminal:
             exit()
             
     def izberiOsebo(self):
+        # Meni: izberiOsebo
         podatki = input("Priimek osebe: ");
         self.cur.execute("""
     SELECT EMSO, IME, PRIIMEK, ULICA, HISNA_STEVILKA, Posta.POSTNA_ST, Posta.POSTA
@@ -79,6 +82,7 @@ class BancniTerminal:
             return
             
     def dodajOsebo(self):
+        # Meni: dodajOsebo
         print("Dodajanje nove osebe")
         ime = input("Ime: ")
         priimek = input("Priimek: ")
@@ -140,6 +144,20 @@ Naslov: {3} {4}, {5} {6}""".format(ime, priimek, emso, ulica, hisna_stevilka, po
         # I - Izpis transakcij
         # P - Položi
         # D - Dvigni
+        print("I - Izpis transakcij")
+        print("P - Položi")
+        print("D - Dvigni")
+        izbira = input("> ")
+        if izbira.lower() == 'i':
+            self.cur.execute("""
+            SELECT RACUN, ZNESEK, DATUM FROM Transakcija
+            WHERE RACUN = ?""", ('%' +  self.racun +'%',))
+            transakcije = self.cur.fetchall()
+            for racun, znesek, datum in transakcije:
+                print(racun, znesek, datum)
+        elif izbira.lower() == 'p':
+            znesek = input('Vnesi znesek: ')
+            #konec
         print("N - Nazaj")
         izbira = input("> ")
         if izbira.lower() == "n":
