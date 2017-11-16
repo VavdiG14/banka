@@ -2,12 +2,18 @@
 # Sodelavci na projektu:
 # - alenFMF
 <<<<<<< HEAD
+<<<<<<< HEAD
 # - MarinaUVP
 =======
+=======
+# - PoljanecB15
+# - Larisa123
+>>>>>>> 9b76b4fca61912a16e9fc01d07cec88db7a6bf9c
 # - kulan89
 # - Larisa123
 # - martincesnovar
 >>>>>>> 9ee9983d86c1ea56688a57d9e5acc87b778920ed
+
 
 import sqlite3
 
