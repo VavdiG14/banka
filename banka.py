@@ -1,4 +1,7 @@
 # Testni projekt o banki.
+# Sodelavci na projektu:
+# - alenFMF
+
 import sqlite3
 
 baza = "banka1.db"
