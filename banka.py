@@ -1,6 +1,7 @@
 # Testni projekt o banki.
 # Sodelavci na projektu:
 # - alenFMF
+# - PoljanecB15
 
 import sqlite3
 
