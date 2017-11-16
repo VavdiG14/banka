@@ -105,17 +105,25 @@ Naslov: {3} {4}, {5} {6}""".format(ime, priimek, emso, ulica, hisna_stevilka, po
         # P - Popravi podatke (naredimo kasneje)
         # R - Izpis računov       
         print("N - Nazaj")
+        print("R - Izpis računov")
         izbira = input("> ")
         if izbira.lower() == "n":
             self.menu = "izberiOsebo"
+            return
+        elif izbira.lower() == "r":
+            self.menu = "izpisRacunov"
             return
         
         
     def izpisRacunov(self):
         # Meni: izpisRačunov
         # Predpostavka: v self.oseba je izbrana oseba
-        print("Izpis racunov za ", self.oseba)
+        print("Izpis racunov za ", self.oseba[1:3])
         # # - izbor računa
+        emso = self.oseba[0]
+        self.cur.execute("SELECT Racun FROM Racun JOIN Oseba ON Racun.EMSO = Oseba.EMSO WHERE "+emso+" = Racun.EMSO") 
+        print("D - Dodaj račun")
+        
         # D - Dodaj račun (ne gremo v nov meni, samo dodamo)
         # N - Nazaj
         print("N - Nazaj")
