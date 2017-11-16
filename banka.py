@@ -2,6 +2,7 @@
 # Sodelavci na projektu:
 # - alenFMF
 # - AnjaTrop
+# - Larisa123
 
 import sqlite3
 
