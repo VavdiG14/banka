@@ -1,7 +1,11 @@
 # Testni projekt o banki.
 # Sodelavci na projektu:
 # - alenFMF
+<<<<<<< HEAD
 # - SavliE12
+=======
+# - Larisa123
+>>>>>>> 8e246fced7b10a55ed3b595bdc96806faebcfd73
 
 import sqlite3
 
