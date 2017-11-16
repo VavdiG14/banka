@@ -2,6 +2,7 @@
 # Sodelavci na projektu:
 # - alenFMF
 # - SavliE12
+# - PoljanecB15
 # - kulan89
 # - Larisa123
 # - martincesnovar
