@@ -1,6 +1,7 @@
 # Testni projekt o banki.
 # Sodelavci na projektu:
 # - alenFMF
+# - kulan89
 # - Larisa123
 # - martincesnovar
 
