@@ -122,19 +122,40 @@ Naslov: {3} {4}, {5} {6}""".format(ime, priimek, emso, ulica, hisna_stevilka, po
     def izpisRacunov(self):
         # Meni: izpisRačunov
         # Predpostavka: v self.oseba je izbrana oseba
-        print("Izpis racunov za ", self.oseba[1:3])
+        print("Izpis računov za:", self.oseba[1] + " " + self.oseba[2])
         # # - izbor računa
         emso = self.oseba[0]
-        self.cur.execute("SELECT Racun FROM Racun JOIN Oseba ON Racun.EMSO = Oseba.EMSO WHERE "+emso+" = Racun.EMSO") 
-        print("D - Dodaj račun")
-        
+        self.cur.execute("SELECT Racun FROM Racun JOIN Oseba ON Racun.EMSO = Oseba.EMSO WHERE Oseba.EMSO = ?", (emso,)) 
+        stevec = 1
+        racuni = self.cur.fetchall()
+        for racun in racuni:
+            print(stevec, racun)
+            stevec += 1
+            
         # D - Dodaj račun (ne gremo v nov meni, samo dodamo)
         # N - Nazaj
+        print("D - Dodaj račun")
         print("N - Nazaj")
         izbira = input("> ")
         if izbira.lower() == "n":
             self.menu = "oOsebi"
             return
+        elif izbira.lower() == "d":
+            print("Ali ste prepričani, da bi radi dodali račun za osebo:", self.oseba[1] + " " + self.oseba[2])
+            # Y - Da, dodaj nov račun
+            # N - Nazaj
+            izbira = input(">")
+            if izbira.lower() == "y":
+                try:
+                    self.cur.execute("INSERT INTO Racun (EMSO, Racun)\
+                    values (?, NULL)", (emso,))
+                    self.con.commit()
+                    print("Vnos novega računa uspešen")
+                except Exception as e:
+                    print("Neuspešen vnos. Poskusi ponovno.", e)
+            elif izbira.lower() == "n":
+                self.menu = "izpisRacunov"
+            self.menu = "izpisRacunov"
 
     def oRacunu(self):
         # Meni: oRacunu
