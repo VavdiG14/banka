@@ -9,37 +9,30 @@
 # - kulan89
 # - martincesnovar
 
-import sqlite3
-
-baza = "banka1.db"
+import modeli
 
 class BancniTerminal:
     def __init__(self):
         self.oseba = None   # izbrana oseba
         self.racun = None   # izbran račun
-        self.cur = None
-        self.con = None
         self.menu = "glavniMenu"   # začetni meni
         self.zazeni()
         
     def zazeni(self):
         # Glavna zanka, ki izbira menije in izvaja ustrezne funkcije.
-        with sqlite3.connect(baza) as con:
-            self.con = con
-            self.cur = con.cursor()
-            while True:
-                if self.menu == "glavniMenu":
-                    self.glavniMenu()
-                elif self.menu == "izberiOsebo":
-                    self.izberiOsebo()
-                elif self.menu == "dodajOsebo":
-                    self.dodajOsebo()
-                elif self.menu == "izpisRacunov":
-                    self.izpisRacunov()
-                elif self.menu == "oOsebi":
-                    self.oOsebi()
-                elif self.menu == "oRacunu":
-                    self.oRacunu()
+        while True:
+            if self.menu == "glavniMenu":
+                self.glavniMenu()
+            elif self.menu == "izberiOsebo":
+                self.izberiOsebo()
+            elif self.menu == "dodajOsebo":
+                self.dodajOsebo()
+            elif self.menu == "izpisRacunov":
+                self.izpisRacunov()
+            elif self.menu == "oOsebi":
+                self.oOsebi()
+            elif self.menu == "oRacunu":
+                self.oRacunu()
 
     def glavniMenu(self):
         # Meni: glavniMenu
@@ -55,13 +48,9 @@ class BancniTerminal:
     def izberiOsebo(self):
         # Meni: izberiOsebo
         podatki = input("Priimek osebe: ");
-        self.cur.execute("""
-    SELECT EMSO, IME, PRIIMEK, ULICA, HISNA_STEVILKA, Posta.POSTNA_ST, Posta.POSTA
-        FROM Oseba JOIN Posta ON Oseba.POSTA = Posta.POSTNA_ST
-        WHERE PRIIMEK LIKE ?""", ("%" + podatki + "%",))
         stevec = 1
         print("Izberi številko pred osebo ali drugo akcijo.")
-        osebe = self.cur.fetchall()
+        osebe = modeli.poisciPriimek(podatki)
         for emso, ime, priimek, _, _, _, _ in osebe:
             print(stevec, priimek, ime, emso)
             stevec += 1
@@ -91,9 +80,12 @@ class BancniTerminal:
         stevilka = input("Hišna številka: ")
         posta = input("Poštna številka: ")
         try:
-            self.cur.execute("INSERT INTO Oseba (IME, PRIIMEK, EMSO, ULICA, HISNA_STEVILKA, POSTA)\
-    values (?,?,?,?,?,?)", (ime, priimek, emso, ulica, stevilka, posta))
-            self.con.commit()
+            if not modeli.dodajOsebo(ime, priimek, emso, ulica,
+                                     stevilka, posta):
+                kraj = input("Kraj: ")
+                modeli.dodajKraj(posta, kraj)
+                modeli.dodajOsebo(ime, priimek, emso, ulica,
+                                  stevilka, posta)
             print("Vnos osebe", ime, priimek, "uspešen")     
         except Exception as e:
             print("Neuspešen vnos. Poskusi ponovno.", e)
@@ -125,9 +117,8 @@ Naslov: {3} {4}, {5} {6}""".format(ime, priimek, emso, ulica, hisna_stevilka, po
         print("Izpis računov za:", self.oseba[1] + " " + self.oseba[2])
         # # - izbor računa
         emso = self.oseba[0]
-        self.cur.execute("SELECT Racun FROM Racun JOIN Oseba ON Racun.EMSO = Oseba.EMSO WHERE Oseba.EMSO = ?", (emso,)) 
+        racuni = racunEMSO(emso)
         stevec = 1
-        racuni = self.cur.fetchall()
         for racun in racuni:
             print(stevec, racun)
             stevec += 1
@@ -147,9 +138,7 @@ Naslov: {3} {4}, {5} {6}""".format(ime, priimek, emso, ulica, hisna_stevilka, po
             izbira = input(">")
             if izbira.lower() == "y":
                 try:
-                    self.cur.execute("INSERT INTO Racun (EMSO, Racun)\
-                    values (?, NULL)", (emso,))
-                    self.con.commit()
+                    modeli.dodajRacun(emso)
                     print("Vnos novega računa uspešen")
                 except Exception as e:
                     print("Neuspešen vnos. Poskusi ponovno.", e)
@@ -170,10 +159,7 @@ Naslov: {3} {4}, {5} {6}""".format(ime, priimek, emso, ulica, hisna_stevilka, po
         print("D - Dvigni")
         izbira = input("> ")
         if izbira.lower() == 'i':
-            self.cur.execute("""
-            SELECT RACUN, ZNESEK, DATUM FROM Transakcija
-            WHERE RACUN = ?""", ('%' +  self.racun +'%',))
-            transakcije = self.cur.fetchall()
+            transakcije = modli.transakcije(self.racun)
             for racun, znesek, datum in transakcije:
                 print(racun, znesek, datum)
         elif izbira.lower() == 'p':
