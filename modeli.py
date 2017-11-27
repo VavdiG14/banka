@@ -1,4 +1,5 @@
 import sqlite3
+import csv
 
 baza = "banka1.db"
 con = sqlite3.connect(baza)
@@ -12,13 +13,20 @@ def poisciPriimek(priimek):
         WHERE PRIIMEK LIKE ?
         """, ("%" + priimek + "%",))
     return cur.fetchall()
-    
+
 def dodajKraj(posta, kraj):
     cur.execute("""
         INSERT INTO Posta (POSTNA_ST, POSTA)
         VALUES (?, ?)
         """, (posta, kraj))
     con.commit()
+
+def _dodajOsebo(ime, priimek, emso, ulica, stevilka, posta):
+    cur.execute("""
+        INSERT INTO Oseba (IME, PRIIMEK, EMSO, ULICA,
+                           HISNA_STEVILKA, POSTA)
+        VALUES (?,?,?,?,?,?)
+        """, (ime, priimek, emso, ulica, stevilka, posta))
 
 def dodajOsebo(ime, priimek, emso, ulica, stevilka, posta):
     cur.execute("""
@@ -27,11 +35,7 @@ def dodajOsebo(ime, priimek, emso, ulica, stevilka, posta):
         """, (posta, ))
     if cur.fetchone() is None:
         return False
-    cur.execute("""
-        INSERT INTO Oseba (IME, PRIIMEK, EMSO, ULICA,
-                           HISNA_STEVILKA, POSTA)
-        VALUES (?,?,?,?,?,?)
-        """, (ime, priimek, emso, ulica, stevilka, posta))
+    _dodajOsebo(ime, priimek, emso, ulica, stevilka, posta)
     con.commit()
     return True
 
@@ -56,3 +60,18 @@ def transakcije(racun):
         WHERE RACUN = ?
         """, ('%' +  racun +'%',))
     return cur.fetchall()
+
+def uvoziPodatke(datoteka):
+    with open(datoteka) as f:
+        reader = csv.reader(f, delimiter = ';')
+        next(reader)
+        try:
+            for ime, priimek, emso, ulica, stevilka, posta in reader:
+                _dodajOsebo(ime, priimek, emso, ulica,
+                            stevilka, posta)
+        except Exception as e:
+            print("Napaka: ", e)
+            con.rollback()
+            return False
+        con.commit()
+        return True
