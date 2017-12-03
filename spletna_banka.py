@@ -16,6 +16,10 @@ from bottle import *
 def glavniMenu():
     return template('glavni.html')
 
+@get('/static/<filename:path>')
+def static(filename):
+    return static_file(filename, root='static')
+
 @get('/oseba')
 def oOsebi():
     return template('oseba.html')

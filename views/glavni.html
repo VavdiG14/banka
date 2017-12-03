@@ -1,29 +1,5 @@
-<html>
-<head>
-  <title>Banka</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  <style type="text/css">
-    .navigator {
-      height: 30px;
-      font-size: 12px;
-    }
-    .napis {
-      margin-right: 10px;
-      font-size: 14px;
-      margin-top: 2px;
-    }
-    .vrstica {
-      display: flex;
-      flex-direction: row;
-      justify-content: flex-start;
-    }
-  </style>
-</head>
-<body>
-    <!-- Navigator  -->
-    <div class="navigator">/</div>
-
-    <!-- Iskalna vrstic -->
+%rebase ('osnova.html', naslov='Banka', navigator='/')
+    <!-- Iskalna vrstica -->
     <div class="vrstica">
       <span class="napis">Išči osebo</span>
       <form method="post">
@@ -35,5 +11,3 @@
           style="margin-left: 20px;margin-top: 2px;"/>
       </form>
     </div>
-</body>
-</html>
