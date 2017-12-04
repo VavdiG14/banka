@@ -1,0 +1,14 @@
+.navigator {
+  height: 30px;
+  font-size: 12px;
+}
+.napis {
+  margin-right: 10px;
+  font-size: 14px;
+  margin-top: 2px;
+}
+.vrstica {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+}
