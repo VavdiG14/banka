@@ -1,4 +1,8 @@
 %rebase ('osnova.html', naslov='Oseba', navigator='/ Oseba')
     <div class="vrstica">
-      To je meni o osebi.
+      EMŠO: {{emso}}<br />
+      Računi:
+      %for racun, in racuni:
+        {{racun}}
+      %end
     </div>

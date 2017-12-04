@@ -1,0 +1,25 @@
+%rebase ('osnova.html', naslov='Iskanje', navigator='/ Iskanje')
+    <div class="vrstica">
+      <table>
+        <tr>
+          <th>EMŠO</th>
+          <th>Ime</th>
+          <th>Priimek</th>
+          <th>Ulica</th>
+          <th>Hišna številka</th>
+          <th>Poštna številka</th>
+          <th>Kraj</th>
+        </tr>
+        %for emso, ime, priimek, ulica, hisna_st, postna_st, kraj in rezultat:
+        <tr>
+          <td><a href="/oseba/{{emso}}">{{emso}}</a></td>
+          <td>{{ime}}</td>
+          <td>{{priimek}}</td>
+          <td>{{ulica}}</td>
+          <td>{{hisna_st}}</td>
+          <td>{{postna_st}}</td>
+          <td>{{kraj}}</td>
+        </tr>
+        %end
+      </table>
+    </div>
