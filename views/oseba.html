@@ -1,8 +1,49 @@
 %rebase ('osnova.html', naslov='Oseba', navigator='/ Oseba')
-    <div class="vrstica">
-      EMŠO: {{emso}}<br />
-      Računi:
-      %for racun, in racuni:
-        {{racun}}
-      %end
-    </div>
+      <div class="naslov_strani">
+         Ime in priimek
+      </div>
+      <table>
+          <tr>
+              <td class="glava">
+                EMŠO:
+              </td>
+              <td>
+                {{emso}}
+              </td>
+          </tr>
+          <tr>
+              <td class="glava">
+                Naslov:
+              </td>
+              <td>
+                Jadranska 21
+              </td>
+          </tr>
+          <tr>
+              <td class="glava">
+                  Pošta:
+              </td>
+              <td>
+                  1000 Ljubljana
+              </td>
+          </tr>
+      </table>
+
+      <table cellspacing="0" cellpadding="0">
+        <tr>
+          <th>Račun</th>
+          <th>Stanje</th>
+          <th>Zadnja sprememba</th>
+          <th>&nbsp;</th>
+          <th>&nbsp;</th>
+        </tr>
+        %for racun, in racuni:
+        <tr>
+          <td>{{racun}}</td>
+          <td>100 EUR</td>
+          <td>16.4.2017</td>
+          <td><input type="submit" value="Polog" name="polog" class="gumbi"/></td>
+          <td><input type="submit" value="Dvig" name="dig" class="gumbi"/></td>
+        </tr>
+        %end
+      </table>
