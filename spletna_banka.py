@@ -53,4 +53,4 @@ def dodaj():
     redirect('/oseba/' + emso)
 
 # poženemo strežnik na portu 8080, glej http://localhost:8080/
-run(host='localhost', port=8080)
+run(host='localhost', port=8080, reloader=True)

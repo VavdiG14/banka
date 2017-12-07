@@ -1,4 +1,7 @@
 %rebase ('osnova.html', naslov='Banka', navigator='/')
+    <div class="naslov_strani">
+       Komitenti
+    </div>
     <!-- Iskalna vrstica -->
     <div class="vrstica">
       <span class="napis">Išči osebo:</span>
@@ -6,6 +9,9 @@
             <input type="text" name="iskalniNiz"/>
             <input type="submit" value="Išči" name="isci"/>
       </form>
+    </div>
+    <div class="naslov_strani">
+       Vnos novega komitenta
     </div>
     <div class="vrstica">
       <form method="post" action="/dodaj">
@@ -66,11 +72,18 @@
                   <input type="text" name="kraj" value="{{kraj}}"/>
                 </td>
             </tr>
+            <tr>
+                <td>
+                    &nbsp;
+                </td>
+                <td class="gumb_dodaj">
+                  <input type="submit" value="Dodaj" name="dodaj"/>
+                </td>
+            </tr>
 
 
         </table>
-        <input type="submit" value="Dodaj" name="dodaj"
-          style="margin-left: 20px;margin-top: 2px;"/>
+
       </form>
     </div>
     %if napaka is not None:
