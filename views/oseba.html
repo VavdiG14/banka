@@ -1,6 +1,6 @@
 %rebase ('osnova.html', naslov='Oseba', navigator='/ Oseba')
       <div class="naslov_strani">
-         Ime in priimek
+         {{ime}} {{priimek}}
       </div>
       <table>
           <tr>
@@ -16,7 +16,7 @@
                 Naslov:
               </td>
               <td>
-                Jadranska 21
+                {{ulica}} {{hisna_st}}
               </td>
           </tr>
           <tr>
@@ -24,7 +24,7 @@
                   Pošta:
               </td>
               <td>
-                  1000 Ljubljana
+                  {{postna_st}} {{posta}}
               </td>
           </tr>
       </table>
@@ -37,13 +37,31 @@
           <th>&nbsp;</th>
           <th>&nbsp;</th>
         </tr>
-        %for racun, in racuni:
+        %for racun, stanje, zadnja in racuni:
         <tr>
           <td>{{racun}}</td>
-          <td>100 EUR</td>
-          <td>16.4.2017</td>
-          <td><input type="submit" value="Polog" name="polog" class="gumbi"/></td>
-          <td><input type="submit" value="Dvig" name="dig" class="gumbi"/></td>
+          <td>{{stanje}} EUR</td>
+          <td>{{pretvori(zadnja)}}</td>
+          <td>
+            <input type="text" id="znesek{{racun}}" size="5" />
+          </td>
+          <td>
+            <form action="/polog/{{racun}}" method="POST">
+              <input type="hidden" name="znesek" id="polog{{racun}}" />
+              <input type="submit" value="Polog" name="polog" class="gumbi" onclick="document.getElementById('polog{{racun}}').value = document.getElementById('znesek{{racun}}').value;" />
+            </form>
+          </td>
+          <td>
+            <form action="/dvig/{{racun}}" method="POST">
+              <input type="hidden" name="znesek" id="dvig{{racun}}" />
+              <input type="submit" value="Dvig" name="dvig" class="gumbi" onclick="document.getElementById('dvig{{racun}}').value = document.getElementById('znesek{{racun}}').value;" />
+            </form>
+          </td>
         </tr>
         %end
       </table>
+      %if napaka is not None:
+      <div class="vrstica napaka">
+      Napaka: {{napaka}}
+      </div>
+      %end

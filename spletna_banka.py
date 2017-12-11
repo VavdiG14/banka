@@ -12,6 +12,11 @@
 import modeli
 from bottle import *
 
+def pretvoriDatum(x):
+    if x is None:
+        return None
+    return time.strftime("%d.%m.%Y", time.strptime(x, '%Y-%m-%d %H:%M:%S'))
+
 @get('/')
 def glavniMenu():
     return template('glavni.html', ime = None, priimek = None, emso = None,
@@ -24,8 +29,15 @@ def static(filename):
 
 @get('/oseba/<emso>')
 def oOsebi(emso):
+    napaka = request.query.napaka
+    if not napaka:
+        napaka = None
+    emso, ime, priimek, ulica, hisna_st, postna_st, posta = modeli.poisciEMSO(emso)
     racuni = modeli.racunEMSO(emso)
-    return template('oseba.html', emso = emso, racuni = racuni)
+    return template('oseba.html', emso = emso, ime = ime, priimek = priimek,
+                    ulica = ulica, hisna_st = hisna_st, postna_st = postna_st,
+                    posta = posta, racuni = racuni, pretvori = pretvoriDatum,
+                    napaka = napaka)
 
 @get('/isci')
 def isci():
@@ -51,6 +63,32 @@ def dodaj():
                         ulica = ulica, hisna_st = hisna_st, postna_st = postna_st,
                         kraj = kraj, napaka = e)
     redirect('/oseba/' + emso)
+
+@post('/polog/<racun>')
+def polog(racun):
+    emso, = modeli.emsoRacun(racun)
+    try:
+        znesek = int(request.forms.znesek)
+    except Exception as e:
+        redirect('/oseba/' + emso + '?napaka=Neveljaven znesek!')
+    if znesek <= 0:
+        redirect('/oseba/' + emso + '?napaka=Znesek mora biti pozitiven!')
+    else:
+        modeli.dodajTransakcijo(racun, znesek)
+        redirect('/oseba/' + emso)
+
+@post('/dvig/<racun>')
+def dvig(racun):
+    emso, = modeli.emsoRacun(racun)
+    try:
+        znesek = int(request.forms.znesek)
+    except Exception as e:
+        redirect('/oseba/' + emso + '?napaka=Neveljaven znesek!')
+    if znesek <= 0:
+        redirect('/oseba/' + emso + '?napaka=Znesek mora biti pozitiven!')
+    else:
+        modeli.dodajTransakcijo(racun, -znesek)
+        redirect('/oseba/' + emso)
 
 # poženemo strežnik na portu 8080, glej http://localhost:8080/
 run(host='localhost', port=8080, reloader=True)

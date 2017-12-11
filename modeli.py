@@ -14,6 +14,15 @@ def poisciPriimek(priimek):
         """, ("%" + priimek + "%",))
     return cur.fetchall()
 
+def poisciEMSO(emso):
+    cur.execute("""
+        SELECT EMSO, IME, PRIIMEK, ULICA, HISNA_STEVILKA,
+            Posta.POSTNA_ST, Posta.POSTA
+        FROM Oseba JOIN Posta ON Oseba.POSTA = Posta.POSTNA_ST
+        WHERE emso = ?
+        """, (emso, ))
+    return cur.fetchone()
+
 def dodajKraj(posta, kraj):
     cur.execute("""
         INSERT INTO Posta (POSTNA_ST, POSTA)
@@ -41,11 +50,20 @@ def dodajOsebo(ime, priimek, emso, ulica, stevilka, posta):
 
 def racunEMSO(emso):
     cur.execute("""
-        SELECT Racun FROM Racun JOIN Oseba
-            ON Racun.EMSO = Oseba.EMSO
-        WHERE Oseba.EMSO = ?
+        SELECT Racun.Racun, COALESCE(SUM(Znesek), 0), MAX(Datum) FROM Racun
+        LEFT JOIN Transakcija
+        ON Racun.Racun = Transakcija.Racun
+        WHERE EMSO = ?
+        GROUP BY Racun.Racun
         """, (emso,))
     return cur.fetchall()
+
+def emsoRacun(racun):
+    cur.execute("""
+        SELECT EMSO FROM Racun
+        WHERE Racun = ?
+    """, (racun, ))
+    return cur.fetchone()
 
 def dodajRacun(emso):
     cur.execute("""
@@ -55,11 +73,18 @@ def dodajRacun(emso):
     con.commit()
 
 def transakcije(racun):
-    self.cur.execute("""
+    cur.execute("""
         SELECT RACUN, ZNESEK, DATUM FROM Transakcija
         WHERE RACUN = ?
         """, ('%' +  racun +'%',))
     return cur.fetchall()
+
+def dodajTransakcijo(racun, znesek):
+    cur.execute("""
+        INSERT INTO Transakcija (RACUN, ZNESEK)
+        VALUES (?, ?)
+    """, (racun, znesek))
+    con.commit()
 
 def uvoziPodatke(datoteka):
     with open(datoteka) as f:
