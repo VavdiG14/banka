@@ -1,0 +1,6 @@
+# Kopiraj v auth.py in popravi podatke
+
+db = "banka_pb1"
+host = "baza.fmf.uni-lj.si"
+user = "pb1"
+password = "geslo"

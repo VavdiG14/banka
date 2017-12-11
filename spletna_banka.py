@@ -9,13 +9,17 @@
 # - kulan89
 # - martincesnovar
 
-import modeli
+import modeli_pg as modeli
 from bottle import *
+from datetime import datetime
 
 def pretvoriDatum(x):
     if x is None:
         return None
-    return time.strftime("%d.%m.%Y", time.strptime(x, '%Y-%m-%d %H:%M:%S'))
+    if isinstance(x, str):
+        return time.strftime("%d.%m.%Y", time.strptime(x, '%Y-%m-%d %H:%M:%S'))
+    else:
+        return datetime.strftime(x, "%d.%m.%Y")
 
 @get('/')
 def glavniMenu():
