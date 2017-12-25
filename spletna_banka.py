@@ -9,7 +9,7 @@
 # - kulan89
 # - martincesnovar
 
-import modeli_pg as modeli
+import modeli as modeli
 from bottle import *
 from datetime import datetime
 

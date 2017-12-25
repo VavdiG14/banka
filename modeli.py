@@ -4,6 +4,7 @@ import csv
 baza = "banka1.db"
 con = sqlite3.connect(baza)
 cur = con.cursor()
+cur.execute("PRAGMA foreign_keys = ON")
 
 def poisciPriimek(priimek):
     cur.execute("""
